@@ -299,5 +299,106 @@ select distinct año/10*10 as decada
 	from peliculas
     group by genero
     order by ingresos_total desc;
-        
+    
+    
+    #Having
  
+ select genero,
+	count(*) as total
+ from peliculas
+ group by genero
+ having count(*) > 1
+ order by total desc;
+ 
+  select genero,
+	sum(ingresos_millones) as total_ingresos
+  from peliculas
+  group by genero
+  having sum(ingresos_millones) > 2000
+  order by total_ingresos desc;
+  
+  #WHERE + GROUP BY + HAVING juntos
+  
+  select genero,
+	count(*) as peliculas, 
+    round(avg(calificacion), 2) as nota_prom
+  from peliculas
+  where año > 2000
+  group by genero
+  having avg(calificacion) > 8
+  order by nota_prom desc;
+  
+  #Orden Completo
+  
+select genero,
+	count(*) as peliculas,
+    round(avg(calificacion), 1) as nota_prom,
+    sum(ingresos_millones) as ingresos_total
+from peliculas
+where año > 2000
+group by genero
+having count(*) > 1
+order by nota_prom desc
+limit 2;
+
+#Ejercicios
+
+create table ventas (
+	id int, 
+    producto varchar (100), 
+    categoria varchar(100),
+    precio float,
+    cantidad int,
+    ciudad varchar(100),
+    vendedor varchar(50));
+    
+insert into ventas values(1, 'Laptop', 'Tecnología', 850, 2, 'Santiago', 'Ana');
+insert into ventas values(2, 'Mouse', 'Tecnología', 25, 10, 'Valparaíso', 'Luis');
+insert into ventas values(3, 'Silla', 'Muebles', 200, 5, 'Santiago', 'Ana');
+insert into ventas values(4, 'Teclado', 'Tecnología', 60, 8, 'Concepción', 'Maria');
+insert into ventas values(5, 'Escritorio', 'Muebles', 350, 3, 'Santiago', 'Luis');
+insert into ventas values(6, 'Monitor', 'Tecnología', 400, 4, 'Valparaiso', 'Maria');
+insert into ventas values(7, 'Lampara', 'Muebres', 80, 6, 'Concepcion', 'Ana');
+insert into ventas values(8, 'Auriculares', 'Tecnología', 120, 7, 'Santiago', 'Luis');
+insert into ventas values(9, 'Escritorio', 'Muebles', 350, 2, 'Valparaiso', 'Ana');
+insert into ventas values(10, 'Laptop', 'Tecnología', 850, 1, 'Concepcion', 'Luis');
+
+select * from ventas;
+
+/*Ejercicio 1 GROUP BY
+¿Cuántas ventas hizo cada vendedor? Muestra vendedor y total de ventas, ordenado de mayor a menor.
+*/
+
+select vendedor, 
+	count(*) as total_ventas
+from ventas
+group by vendedor
+order by total_ventas desc;
+
+/*Ejercicio 2 — SUM + GROUP BY 
+¿Cuánto ingresó cada categoría en total? 
+El ingreso de cada venta es precio × cantidad. Muestra categoría, 
+ingreso total y número de productos distintos vendidos.
+*/
+
+select categoria, 
+	sum(precio * cantidad) as ingreso_total,
+	count(*) as num_ventas
+from ventas
+group by categoria
+order by ingreso_total desc;
+
+/*Ejercicio 3 — HAVING 
+¿Qué ciudades tienen un ingreso total mayor a $1500? 
+Muestra ciudad, ingreso total y número de ventas. Ordena por ingreso total descendente.
+*/
+
+select ciudad,
+	sum(precio * cantidad) as ingreso_total,
+    count(*) as num_ventas
+from ventas
+group by ciudad
+having sum(precio * cantidad) > 1500
+order by ingreso_total desc;
+
+UPDATE ventas SET ciudad = 'Valparaíso' WHERE ciudad = 'Valparaiso';
