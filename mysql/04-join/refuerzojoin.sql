@@ -61,10 +61,6 @@ insert into detalle_pedidos values
     (10, 106, 'Mouse', 'Tecnología', 25, 2),
     (11, 106, 'Lámpara', 'Muebles', 80, 1);
     
-select * from clientes;
-select * from pedidos;
-select * from detalle_pedidos;
-
 #Ejercicios 1 a 3
 
 /*Inner join
@@ -125,5 +121,54 @@ group by dp.categoria
 having sum(dp.precio * dp.cantidad) > 500
 order by ingreso_total desc;
 
+/*Ejercicio 5 — 3 tablas + GROUP BY
+¿Cuánto gastó cada segmento de clientes (Premium vs Regular) en total, y cuántos pedidos hicieron? Ordena por gasto total descendente.
+*/
 
-    
+select
+	c.segmento,
+    count(p.pedido_id) as num_pedidos,
+    sum(p.total) as gasto_total,
+    round(avg(p.total), 0) as ticket_promedio
+from clientes c 
+inner join pedidos p 
+	on c.cliente_id = p.cliente_id
+group by c.segmento
+order by gasto_total desc;
+
+/*Ejercicio 6 — LEFT JOIN + IS NULL + segmento
+¿Hay clientes Premium que nunca han comprado? Muestra su nombre y ciudad.
+*/
+select
+	c.nombre,
+    c.ciudad,
+    c.segmento
+from clientes c
+left join pedidos p 
+	on c.cliente_id = p.cliente_id
+where p.pedido_id is null 
+and c.segmento = 'Premium';
+
+/*Desafio Final
+Necesito un reporte por cliente que muestre: nombre, segmento, número de pedidos, total gastado y el producto más caro que compró. 
+Solo clientes que hayan gastado más de $300 en total. Ordena por total gastado descendente.
+*/
+
+select
+	c.nombre,
+    c.segmento,
+    count(distinct p.pedido_id) as num_pedidos,
+    sum(dp.precio * dp.cantidad) as total_gastado,
+    max(dp.precio) as producto_mas_caro
+from clientes c
+inner join pedidos p 
+	on c.cliente_id = p.cliente_id
+inner join detalle_pedidos dp
+	on p.pedido_id = dp.pedido_id
+group by c.nombre, c.segmento
+having sum(dp.precio * dp.cantidad) > 300
+order by total_gastado desc;
+
+select * from clientes;
+select * from pedidos;
+select * from detalle_pedidos; 
