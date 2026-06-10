@@ -15,7 +15,7 @@ para convertirme en analista de datos remota.
 | [02-filtros-y-orden](./mysql/02-filtros-y-orden/) | ORDER BY, LIMIT, DISTINCT | Semana 3–4 |
 | [03-group-by](./mysql/03-group-by/) | GROUP BY y HAVING | Semana 5–6 |
 | [04-join](./mysql/04-join/) | JOINs | Semana 7–8 |
-| [05-coalesce](./mysql/05-coalesce/) | COALESCE | Refuerzo de Conceptos |
+| [05-coalesce](./mysql/05-coalesce/) | COALESCE y NULL | Semana 8 |
 
 ---
 
