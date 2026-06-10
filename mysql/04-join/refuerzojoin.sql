@@ -81,19 +81,49 @@ inner join pedidos p
 order by p.fecha;
 
 
-/*LEFT JOIN + clientes sin pedidos 
+/*Ejercicio 2
+LEFT JOIN + clientes sin pedidos 
 Lista todos los clientes con su total de pedidos. Si un cliente no ha pedido nada, muestra 0 en vez de NULL. Ordena por total descendente.
 */
 
 select 
 	c.nombre,
-    c.segmento
-    count(p.pedido_id) as total_pedido,
-    sum(p.total) as total_gastado
+    c.segmento,
+    coalesce(sum(p.total), 0) as total_gastado,
+    count(p.pedido_id) as num_pedido
 from clientes c
 left join pedidos p
 	on c.cliente_id = p.cliente_id
+group by c.nombre, c.segmento
 order by total_gastado desc;
-    
+
+/*Ejercicio 3 — JOIN con filtro WHERE
+¿Qué productos compraron los clientes Premium? Muestra nombre del cliente, producto y precio. Sin repetidos de producto por cliente.
+*/
+	select 
+		c.nombre,
+		dp.producto,
+		dp.precio
+	from clientes c 
+	inner join pedidos p
+		on c.cliente_id = p.cliente_id
+	inner join detalle_pedidos dp
+		on p.pedido_id = dp.pedido_id
+	where c.segmento = 'Premium'
+	order by c.nombre, dp.precio desc;
+
+/*Ejercicio 4 — JOIN + GROUP BY + HAVING
+¿Qué categorías de productos generaron más de $500 en ingresos totales? Muestra categoría, ingresos totales y cantidad de ítems vendidos.
+*/
+
+select 
+	dp.categoria,
+    sum(dp.precio * dp.cantidad) as ingreso_total,
+    sum(dp.cantidad) as items_vendidos
+from detalle_pedidos dp
+group by dp.categoria
+having sum(dp.precio * dp.cantidad) > 500
+order by ingreso_total desc;
+
 
     
