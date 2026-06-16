@@ -19,6 +19,14 @@ para convertirme en analista de datos remota.
 
 ---
 
+## 🐍 Python
+
+| Carpeta | Tema | Semana |
+|---------|------|--------|
+| [01-fundamentos](./Python/01-fundamentos/) | Variables, listas, bucles, funciones | Semana 9–10 |
+
+---
+
 ## 🛠️ Tecnologías
 - MySQL Workbench
 - Git & GitHub
